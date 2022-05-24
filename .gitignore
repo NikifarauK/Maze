@@ -1,0 +1,7 @@
+#gitignore
+.vscode/
+[Bb]uild/
+[bB]in/
+*.o
+*.log
+
