@@ -10,7 +10,7 @@ namespace Rendering
     {
     public:
         ~Shader();
-        static Shader BuildShader(const std::string& ver, const std::string&);
+        static Shader* BuildShader(const std::string& ver, const std::string& frag);
         void bind() const;
         void unbind() const;
 
@@ -24,8 +24,11 @@ namespace Rendering
         uint32_t compileShader(uint32_t, const std::string&);
         int getUniformLocation(const std::string&);
 
-        Shader();//move to private
     private:
+        Shader();
+        Shader(const Shader&) = delete;
+        Shader(Shader&) = delete;
+        Shader(Shader&&) = delete;
         uint32_t _id;
         std::unordered_map<std::string, int32_t>* _p_uniforms_hash;
     };

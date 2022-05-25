@@ -9,7 +9,7 @@ namespace Rendering
     {
         uint8_t normolized;
         uint32_t count;
-        uint32_t size;
+        uint32_t type;
 
         inline static uint32_t GetTypeSize(uint32_t type)
         {

@@ -14,22 +14,22 @@ namespace Rendering
         delete _p_uniforms_hash;
     }
 
-    Shader Shader::BuildShader(const std::string& ver, const std::string& frag)
+    Shader* Shader::BuildShader(const std::string& ver, const std::string& frag)
     {
-        Shader sh;
-        std::string ver_source = sh.getShaderSource(ver);
-        uint32_t ver_id = sh.compileShader(GL_VERTEX_SHADER, ver_source);
+        Shader* sh = new Shader();
+        std::string ver_source = sh->getShaderSource(ver);
+        uint32_t ver_id = sh->compileShader(GL_VERTEX_SHADER, ver_source);
 
-        std::string frag_source = sh.getShaderSource(frag);
-        uint32_t frag_id = sh.compileShader(GL_FRAGMENT_SHADER, frag_source);
+        std::string frag_source = sh->getShaderSource(frag);
+        uint32_t frag_id = sh->compileShader(GL_FRAGMENT_SHADER, frag_source);
 
-        sh._id = glCreateProgram();
-        glAttachShader(sh._id, ver_id);
-        glAttachShader(sh._id, frag_id);
-        glLinkProgram(sh._id);
+        sh->_id = glCreateProgram();
+        glAttachShader(sh->_id, ver_id);
+        glAttachShader(sh->_id, frag_id);
+        glLinkProgram(sh->_id);
 
         int success;
-        glGetProgramiv(sh._id, GL_LINK_STATUS, &success);
+        glGetProgramiv(sh->_id, GL_LINK_STATUS, &success);
 
         if (!success)
         {
@@ -40,7 +40,7 @@ namespace Rendering
         glDeleteShader(ver_id);
         glDeleteShader(frag_id);
 
-        return std::move(sh);
+        return sh;
     }
 
     void Shader::bind() const {

@@ -22,10 +22,19 @@ namespace Rendering
         buffLayout->Push<Shapes::Vertex>(0);
 
         sr._vArray->addBuffer(*sr._vBuff, *buffLayout);
-
         delete buffLayout;
+
+        sr._shader = Shader::BuildShader("../res/shaders/vertex.glsl", "../res/shaders/fragment.glsl");
+
         return sr;
     }
 
+    void StaticRenderable::Render() const{
+        _shader->bind();
+        _vArray->bind();
+        glDrawElements(GL_TRIANGLES, _obj.getIndicesCount(), GL_UNSIGNED_INT, nullptr);
+        _vArray->unbind();
+        _shader->unbind();
+    }
 
 } // namespace Rendering

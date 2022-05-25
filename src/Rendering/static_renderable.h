@@ -15,6 +15,10 @@ namespace Rendering
         ~StaticRenderable();
         static StaticRenderable Create(const Shapes::RendShape&);
 
+        inline void setMatrix4f(const std::string& name, glm::mat4 val){ _shader->setUniform_m4f(name, val); };
+        inline void setVector3f(const std::string& name, glm::vec3 val){ _shader->setUniform_v3f(name, val); };
+        inline void setFloat   (const std::string& name, float val)    { _shader->setUniform_f  (name, val); };
+        inline void setInt     (const std::string& name, int val)      { _shader->setUniform_i  (name, val); };
         void Render() const;
     private:
         StaticRenderable(const Shapes::RendShape&);

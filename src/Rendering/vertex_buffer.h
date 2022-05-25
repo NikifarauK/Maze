@@ -9,7 +9,7 @@ namespace Rendering
     {
     public:
         VertBuffer() : _id{} {};
-        virtual ~VertBuffer() = 0;
+        virtual ~VertBuffer() {};
 
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
