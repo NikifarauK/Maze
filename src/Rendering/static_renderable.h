@@ -13,7 +13,7 @@ namespace Rendering
     {
     public:
         ~StaticRenderable();
-        static StaticRenderable Create(const Shapes::RendShape&);
+        static StaticRenderable* Create(Shapes::RendShape*);
 
         inline void setMatrix4f(const std::string& name, glm::mat4 val){ _shader->setUniform_m4f(name, val); };
         inline void setVector3f(const std::string& name, glm::vec3 val){ _shader->setUniform_v3f(name, val); };
@@ -21,12 +21,13 @@ namespace Rendering
         inline void setInt     (const std::string& name, int val)      { _shader->setUniform_i  (name, val); };
         void Render() const;
     private:
-        StaticRenderable(const Shapes::RendShape&);
-        const Shapes::RendShape& _obj;
         VertexArray *_vArray;
         VertBuffer  *_vBuff;
         IndexBuffer *_iBuff;
         Shader      *_shader;
+        Shapes::RendShape* _obj;
+
+        StaticRenderable(Shapes::RendShape*);
     };
 
 } // namespace Rendering

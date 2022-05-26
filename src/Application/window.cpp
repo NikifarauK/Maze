@@ -20,20 +20,19 @@ namespace Application
         if (_isValid = _window != nullptr)
         {
             glfwMakeContextCurrent(_window);
-            //glfwSetWindowTitle(_window, _name.c_str());
             if (_isValid = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
             {
-                glViewport(0, 0, _width, _heigth);
-                glfwSwapInterval(1);
+                GLCHECK(glViewport(0, 0, _width, _heigth));
+                GLCHECK(glfwSwapInterval(1));
+                GLCHECK(glEnable(GL_BLEND));
+                GLCHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+                GLCHECK(glEnable(GL_DEPTH_TEST));
+                GLCHECK(glEnable(GL_CULL_FACE));
+                GLCHECK(glFrontFace(GL_CW));
             }
             else
                 _window = nullptr;
         }
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
-        glFrontFace(GL_CW);
     }
 
     Window::~Window()
@@ -57,6 +56,7 @@ namespace Application
     }
 
     void Window::setCursorLock(bool isLock){
+        _cursorLocked = isLock;
         if(isLock)
             glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         else

@@ -22,13 +22,16 @@ namespace Application
         inline int32_t getWidth() { return _width; }
         inline int32_t getHeigth() { return _heigth; }
         inline float getAspRatio() { return static_cast<float>(_width) / _heigth; }
+        inline void setTitle(const std::string& title) { glfwSetWindowTitle(_window, title.c_str()); };
+        inline bool isCursorLocked() {return _cursorLocked; };
 
     private:
-        std::string _name;
+        bool _isValid = false;
+        bool _cursorLocked = false;
         int32_t _width = 960;
         int32_t _heigth = 540;
         GLFWwindow* _window = nullptr;
-        bool _isValid = false;
+        std::string _name;
 
         Window(const Window&) = delete;
         Window(Window&) = delete;

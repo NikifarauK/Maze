@@ -19,7 +19,16 @@
 
 
 #if _DEBUG
-#define ASSERT(x) if(!(x)) asm("int $3");
+#define ASSERT(x) if(!(x)) {std::cerr << "!--->ASSERT!!!"; asm("int $3");}
+
+#define GLCHECK(x) glClearError();\
+x;\
+ASSERT(glLogCall(#x))
+
 #else
 #define ASSERT(x) x
+#define GLCHECK(x) x
 #endif
+
+bool glLogCall(const char* func);
+void glClearError();

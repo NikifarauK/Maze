@@ -6,12 +6,11 @@
 
 namespace Rendering
 {
-    Shader::Shader() : _id{}, _p_uniforms_hash(new std::unordered_map<std::string, int>){}
+    Shader::Shader() : _id{}, _uniforms_hash(){}
 
     Shader::~Shader()
     {
         glDeleteProgram(_id);
-        delete _p_uniforms_hash;
     }
 
     Shader* Shader::BuildShader(const std::string& ver, const std::string& frag)
@@ -44,7 +43,7 @@ namespace Rendering
     }
 
     void Shader::bind() const {
-        glUseProgram(_id);
+        GLCHECK(glUseProgram(_id));
     }
 
     void Shader::unbind() const {
@@ -71,15 +70,16 @@ namespace Rendering
         std::string tmp;
         std::stringstream res;
         std::ifstream stream(path);
-        while(getline(stream, tmp))
+        while(getline(stream, tmp)){
             res << tmp <<'\n';
+        }
         return res.str();
     }
 
     uint32_t Shader::compileShader(uint32_t type, const std::string& source){
         uint32_t id = glCreateShader(type);
         const char* src = source.c_str();
-        glShaderSource(id, 1, &src, nullptr);
+        glShaderSource(id, 1, &src, 0);
         glCompileShader(id);
 
         int success;
@@ -88,7 +88,7 @@ namespace Rendering
         char log[512];
         if(!success){
             glGetShaderInfoLog(id, 512, nullptr, log);
-            std::cerr << "shader-> compile error: "<< log << std::endl;
+            std::cerr << "shader-> compile error: "<< log;
             switch(type){
                 case GL_VERTEX_SHADER:
                     std::cerr << " --->vertex" << std::endl;
@@ -103,15 +103,16 @@ namespace Rendering
     }
 
     int Shader::getUniformLocation(const std::string& name){
-        if(_p_uniforms_hash->find(name) != _p_uniforms_hash->end()){
-            return (*_p_uniforms_hash)[name];
+        bind();
+        if(_uniforms_hash.find(name) != _uniforms_hash.end()){
+            return _uniforms_hash[name];
         }
         int loc = glGetUniformLocation(_id, name.c_str());
         if(-1 == loc){
             std::cerr << "shader-> warning, uniform " << name << " is not exist"
             << std::endl;
         }
-        (*_p_uniforms_hash)[name] = loc;
+        _uniforms_hash[name] = loc;
         return loc;
     }
 } // namespace Rendering

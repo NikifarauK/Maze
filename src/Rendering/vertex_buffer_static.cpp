@@ -4,9 +4,9 @@ namespace Rendering
 {
     VertBufferStatic::VertBufferStatic(const void* data, uint32_t size)
     : VertBuffer() {
-        glGenBuffers(1, &_id);
+        GLCHECK(glGenBuffers(1, &_id));
         bind();
-        glBufferData(GL_ARRAY_BUFFER,size, data, GL_STATIC_DRAW);
+        GLCHECK(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
     }
 
     VertBufferStatic::~VertBufferStatic(){

@@ -1,26 +1,28 @@
 #include "scene_manager.h"
+#include <sstream>
 
 namespace Application
 {
-    bool s_cursor_lock = false;
     float SceneManager::s_x_mouse = 0.0f;
     float SceneManager::s_y_mouse = 0.0f;
     std::vector<bool> SceneManager::s_keys(512, false);
 
     SceneManager::SceneManager()
-    : _mouse_sens{0.075f}, _speed{5.5f}, 
+    : _mouse_sens{0.025f}, _speed{5.5f}, 
       _yaw{}, _pitch{}, _last_mouse_x{}, _last_mouse_y{},
-      _pos{},
+      _pos(1,0,0),
       _p_window{}, _p_camera{}, _scene{}  
     {}
 
     SceneManager::~SceneManager(){
         // delete _p_window;
         delete _p_camera;
+        for(auto p : _scene)
+            delete p;
     }
 
     void SceneManager::onKey(GLFWwindow*, int key, int scancode, int action, int mode){
-        if(key == -1 || key >= s_keys.size()) return;
+       if(key == -1 || key >= s_keys.size()) return;
 
         if(action == GLFW_PRESS) s_keys[key] = true;
         if(action == GLFW_RELEASE) s_keys[key] = false;
@@ -32,12 +34,14 @@ namespace Application
     }
 
     void SceneManager::mouseHandler(){
+        if(!_p_window->isCursorLocked())
+            return;
         float x_offset = _mouse_sens * (s_x_mouse - _last_mouse_x);
         float y_offset = _mouse_sens * (_last_mouse_y - s_y_mouse);
         _last_mouse_x = s_x_mouse;
         _last_mouse_y = s_y_mouse;
         _yaw += x_offset;
-        _pitch += y_offset;
+        _pitch -= y_offset;
         if(_pitch > 89.5f) _pitch = 89.5f;
         if(_pitch < -89.5f) _pitch = -89.5f;
         glm::vec3 f{
@@ -46,17 +50,55 @@ namespace Application
             cos(glm::radians(_pitch)) * sin(glm::radians(_yaw))
         };
 
-        _p_camera->setDirection(f);
+        _p_camera->setDirection(glm::normalize(f));
     }
 
     void SceneManager::keyHandler(float elapsed_time){
         if(s_keys[GLFW_KEY_W] || s_keys[GLFW_KEY_UP])
-            _pos += _p_camera->getDirection() * _speed * elapsed_time;
-        if(s_keys[GLFW_KEY_S] || s_keys[GLFW_KEY_DOWN])
             _pos -= _p_camera->getDirection() * _speed * elapsed_time;
+        if(s_keys[GLFW_KEY_S] || s_keys[GLFW_KEY_DOWN])
+            _pos += _p_camera->getDirection() * _speed * elapsed_time;
 
         if(s_keys[GLFW_KEY_A] || s_keys[GLFW_KEY_LEFT])
+            _pos += glm::normalize(glm::cross(_p_camera->getDirection(), glm::vec3{0.0f, 1.0f, 0.0f}))* _speed * elapsed_time;
+        if(s_keys[GLFW_KEY_D] || s_keys[GLFW_KEY_RIGHT])
             _pos -= glm::normalize(glm::cross(_p_camera->getDirection(), glm::vec3{0.0f, 1.0f, 0.0f}))* _speed * elapsed_time;
-        if(s_keys[GLFW_KEY_ESCAPE]) _p_window->setCursorLock(s_cursor_lock = ! s_cursor_lock);
+
+        if(s_keys[GLFW_KEY_Q] || s_keys[GLFW_KEY_E])
+            _pos += _p_camera->getUp() * _speed * elapsed_time;
+        if(s_keys[GLFW_KEY_X] || s_keys[GLFW_KEY_Z])
+            _pos -= _p_camera->getUp() * _speed * elapsed_time;
+            
+        if(s_keys[GLFW_KEY_1]) {
+            _p_window->setCursorLock(true);
+            _last_mouse_x = s_x_mouse;
+            _last_mouse_y = s_y_mouse;
+        }
+        if(s_keys[GLFW_KEY_2]) _p_window->setCursorLock(false);
+        _p_camera->setPos(_pos);
+    }
+
+    void SceneManager::UpdateAndRender(float elapsed_time){
+        static float green = 0.0f;
+        mouseHandler();
+        keyHandler(elapsed_time);
+        auto m4View = _p_camera->GetViewMatrix();
+        auto m4Persp = _p_camera->GetPerspectiveMatrix(_p_window->getAspRatio());
+        glClearColor(0.2f, 0.67f, 0.8f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        for (auto obj : _scene){
+            obj->setMatrix4f("projection", m4Persp);
+            obj->setMatrix4f("trans", m4View);
+            obj->setMatrix4f("model", glm::mat4(1.0f));
+            obj->setFloat("green", green);
+            obj->Render();
+        }
+        green +=  green < 1.0f ? 0.005f : -1.0f;
+        std::stringstream title;
+        auto dir = _p_camera->getDirection();
+        title << "pos: " << _pos.x << "," << _pos.y << "," << _pos.z
+              << " dir: " << dir.x << "," << dir.y << "," << dir.z
+              << " fps: " << 1.0f / elapsed_time;
+        _p_window->setTitle(title.str());
     }
 } // namespace Application

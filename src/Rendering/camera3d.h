@@ -13,6 +13,8 @@ namespace Rendering
         inline void setPos(glm::vec3 pos) { _position = pos; }
         inline glm::vec3 getDirection() { return _direction; }
         inline void setDirection(glm::vec3 dir) { _direction = dir; }
+        inline glm::vec3 getUp() { return _up; };
+        inline void setUp(glm::vec3 up) { _up = up; };
         glm::mat4 GetViewMatrix();
         glm::mat4 GetPerspectiveMatrix(float asp_ratio);
 

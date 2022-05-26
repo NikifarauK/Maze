@@ -26,11 +26,11 @@ namespace Rendering
 
     private:
         Shader();
-        Shader(const Shader&) = delete;
-        Shader(Shader&) = delete;
-        Shader(Shader&&) = delete;
+        // Shader(const Shader&) = delete;
+        // Shader(Shader&) = delete;
+        // Shader(Shader&&) = delete;
         uint32_t _id;
-        std::unordered_map<std::string, int32_t>* _p_uniforms_hash;
+        std::unordered_map<std::string, int32_t> _uniforms_hash;
     };
 
     

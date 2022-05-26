@@ -2,7 +2,7 @@
 
 namespace Rendering
 {
-    Camera3d::Camera3d() : _position{}, _direction{}, _up{}, 
+    Camera3d::Camera3d() : _position{}, _direction{}, _up(0.0f, 1.0f, 0.0f), 
         _observe_angle{3.14159265f/4},
         _near{0.005f}, _far{50.f}
     {}

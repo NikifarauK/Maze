@@ -4,9 +4,10 @@ namespace Rendering
 {
     IndexBufferStatic::IndexBufferStatic(const uint32_t* data, uint32_t count)
     : IndexBuffer(count) {
-        glGenBuffers(1, &_id);
+        ASSERT(sizeof(uint32_t) == sizeof(GLuint));
+        GLCHECK(glGenBuffers(1, &_id));
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), data, GL_STATIC_DRAW);
+        GLCHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), data, GL_STATIC_DRAW));
     }
 
     IndexBufferStatic::~IndexBufferStatic(){
@@ -14,7 +15,7 @@ namespace Rendering
     }
 
     void IndexBufferStatic::bind() const{
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
+        GLCHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id));
     }
     
     void IndexBufferStatic::unbind() const{
