@@ -1,5 +1,6 @@
 #include "scene_manager.h"
 #include <sstream>
+#include <iomanip>
 
 namespace Application
 {
@@ -8,7 +9,7 @@ namespace Application
     std::vector<bool> SceneManager::s_keys(512, false);
 
     SceneManager::SceneManager()
-    : _mouse_sens{0.025f}, _speed{5.5f}, 
+    : _mouse_sens{0.035f}, _speed{6.5f}, 
       _yaw{}, _pitch{}, _last_mouse_x{}, _last_mouse_y{},
       _pos(1,0,0),
       _p_window{}, _p_camera{}, _scene{}  
@@ -93,12 +94,13 @@ namespace Application
             obj->setFloat("green", green);
             obj->Render();
         }
-        green +=  green < 1.0f ? 0.005f : -1.0f;
+        green +=  green < 1.0f ? 0.5f * elapsed_time : -1.0f;
         std::stringstream title;
         auto dir = _p_camera->getDirection();
-        title << "pos: " << _pos.x << "," << _pos.y << "," << _pos.z
+        title << std::fixed << std::setprecision(3)
+              << "pos: " << _pos.x << "," << _pos.y << "," << _pos.z
               << " dir: " << dir.x << "," << dir.y << "," << dir.z
-              << " fps: " << 1.0f / elapsed_time;
+              << " fps: " << std::setw(7) << 1.0f / elapsed_time;
         _p_window->setTitle(title.str());
     }
 } // namespace Application
