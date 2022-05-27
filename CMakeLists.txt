@@ -11,8 +11,9 @@ target_precompile_headers(Maze PRIVATE src/maze.h)
 add_subdirectory(third_party/glm EXCLUDE_FROM_ALL)
 add_subdirectory(third_party/glfw EXCLUDE_FROM_ALL)
 add_subdirectory(third_party/GLAD EXCLUDE_FROM_ALL)
+add_subdirectory(third_party/stb_image EXCLUDE_FROM_ALL)
 
-target_link_libraries(Maze PRIVATE glfw glm glad)
+target_link_libraries(Maze PRIVATE glfw glm glad stb_image)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
