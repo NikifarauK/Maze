@@ -1,5 +1,6 @@
 #include "scene_bulder.h"
 #include "../Shapes/cube.h"
+#include "../Shapes/sphere.h"
 
 namespace Application
 {
@@ -24,7 +25,7 @@ namespace Application
         camera->setDirection(glm::vec3(1,0,0));
     }
 
-    void SceneBuilder:: AddStaticRenderable(Shapes::RendShape* obj){
+    void SceneBuilder:: AddStaticRenderable(const Shapes::RendShape& obj){
         _p_instance->_scene.emplace_back(Rendering::StaticRenderable::Create(obj));
     }
 
@@ -36,18 +37,18 @@ namespace Application
         StartCreation();
         SetWindow(window);
         SetCamera(new Rendering::Camera3d());
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(0.0f, 0.0f, 5.0f),   4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(0.0f, 5.0f, 0.0f),   4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(5.0f, 0.0f, 0.0f),   4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(5.0f, 5.0f, 0.0f),   4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(0.0f, 5.0f, 5.0f),   4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(5.0f, 0.0f, 5.0f),   4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(-5.0f, 0.0f, 0.0f),  4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(-5.0f, -5.0f, 0.0f), 4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(-5.0f, 0.0f, -5.0f), 4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(0.0f, -5.0f, 0.0f),  4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(5.0f, -5.0f, 5.0f),  4));
-        AddStaticRenderable(new Shapes::Cube(glm::vec3(-5.0f, 0.0f, 5.0f),  4));
+        AddStaticRenderable(Shapes::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 64, 64));
+        AddStaticRenderable(Shapes::Sphere(glm::vec3(0.0f, 5.0f, 0.0f), 0.8f, 5, 5));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(5.0f, 0.0f, 0.0f),   2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(5.0f, 5.0f, 0.0f),   2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(0.0f, 5.0f, 5.0f),   2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(5.0f, 0.0f, 5.0f),   2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(-5.0f, 0.0f, 0.0f),  2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(-5.0f, -5.0f, 0.0f), 2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(-5.0f, 0.0f, -5.0f), 2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(0.0f, -5.0f, 0.0f),  2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(5.0f, -5.0f, 5.0f),  2));
+        AddStaticRenderable(Shapes::Cube(glm::vec3(-5.0f, 0.0f, 5.0f),  2));
         return Build();
     }
 } // namespace Application

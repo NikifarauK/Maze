@@ -15,7 +15,7 @@ namespace Application
         void StartCreation();
         void SetWindow(Window*);
         void SetCamera(Rendering::Camera3d*);
-        void AddStaticRenderable(Shapes::RendShape*);
+        void AddStaticRenderable(const Shapes::RendShape&);
         SceneManager* Build();
         virtual SceneManager* Create(Window*);
     protected:
