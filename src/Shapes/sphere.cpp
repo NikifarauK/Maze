@@ -1,14 +1,18 @@
 #include "sphere.h"
+#include <sstream>
 
 namespace Shapes
 {
-    Sphere::Sphere(glm::vec3 pos, float radius, uint32_t sectors, uint32_t stacks)
-        : _position{pos}, _radius{radius}
+    Sphere::Sphere(uint32_t sectors, uint32_t stacks)
+        :  RendShape("")
     {
-
+        std::stringstream ss;
+        ss << "sphere" << sectors << "x" << stacks;
+        _name = ss.str();
+        float radius = 1.0f;
         sectors = sectors > 3 ? sectors : 3;
         stacks = stacks > 2 ? stacks : 2;
-        _vertices.emplace_back(pos.x, pos.y + radius, pos.z, 0.5f, 0);
+        _vertices.emplace_back(0.0f, radius, 0.0f,0.0f, radius, 0.0f, 0.5f, 0);
         
         float dtx = 1.0f / sectors;
         float dty = 1.0f / stacks;
@@ -25,14 +29,14 @@ namespace Shapes
             {
                 auto m4_hor_rot = glm::rotate(glm::mat4(1.0f), h_angle, glm::vec3(0.0f, 1.0f, 0.0f));
                 auto v4 = m4_hor_rot * ver;
-                glm::vec3 res = glm::vec3(v4.x, v4.y, v4.z) + pos;
-                _vertices.emplace_back(res, dtx*(lon-1), dty*lat);
+                glm::vec3 res = glm::vec3(v4.x, v4.y, v4.z);
+                _vertices.emplace_back(res, res, dtx*(lon-1), dty*lat);
                 setIndices(_indices, stacks, lat, sectors, lon);
                 h_angle += dh_angle;
             }
             v_angle += dv_angle;
         }
-        _vertices.emplace_back(pos.x, pos.y - radius,pos.z, 0.5f, 1.0f);
+        _vertices.emplace_back(0.0f, -radius,0.0f, 0.0f, -radius, 0.0f, 0.5f, 1.0f);
         setLastStackIndices(_indices, stacks, sectors, _vertices.size() - 1);
     }
 

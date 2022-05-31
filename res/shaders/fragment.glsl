@@ -1,6 +1,7 @@
 #version 330 core
 
 in vec2 v_texCoord;
+in vec3 v_norm;
 
 out vec4 color;
 

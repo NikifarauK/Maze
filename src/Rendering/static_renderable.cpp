@@ -1,54 +1,56 @@
 #include "static_renderable.h"
-#include "buffer_layout.h"
 #include "../helpers.h"
 
 namespace Rendering
 {
     StaticRenderable::StaticRenderable()
-        : _vArray{}, _vBuff{}, _iBuff{}, _shader{}, _texture{} {}
+        : _scale{1.0f}, _pos{0.0f}, _rot{0.0f}, p_shader{}, p_texture{} {}
 
-    StaticRenderable::~StaticRenderable(){
-        delete _vArray;
-        delete _vBuff;
-        delete _iBuff;
-        delete _shader;
-    }
+    StaticRenderable::~StaticRenderable(){}
 
-    StaticRenderable* StaticRenderable::Create(const Shapes::RendShape& mesh, std::shared_ptr<Texture> tex){
-        auto sr = new StaticRenderable();
-        sr->_vArray = new VertexArray();
-        sr->_vBuff = new VertBufferStatic(mesh.getVertData(), mesh.getVertSize());
-        sr->_iBuff = new IndexBufferStatic(mesh.getIndicesData(), mesh.getIndicesCount());
-        BufferLayout buffLayout;
-        buffLayout.Push<Shapes::Vertex>(0);
+    StaticRenderable* StaticRenderable::Create
+        (const Shapes::RendShape& mesh, glm::vec3 scale,
+        glm::vec3 pos, glm::vec3 rot, std::shared_ptr<Texture> tex){
+        auto sr = new StaticRenderable;
+        sr->p_glBuffer = GLBuffConteiner::Create(mesh);
 
-        sr->_vArray->addBuffer(*sr->_vBuff, buffLayout);
-
-        auto str = Helpers::parent_path();
+        sr->_scale = scale;
+        sr->_pos = pos;
+        sr->_rot = rot;
         if(!tex){
-            sr->_shader = Shader::BuildShader(str + "/../res/shaders/vertex.glsl",
-             str + "/../res/shaders/fragment.glsl");
+            sr->p_shader = std::shared_ptr<Shader>(Shader::BuildShader(Helpers::shader_location("/vertex.glsl"),
+             Helpers::shader_location("/fragment.glsl")));
         }
         else{
-            sr->_texture = tex; 
-            sr->_shader =Shader::BuildShader(str + "/../res/shaders/vertex.glsl",
-             str + "/../res/shaders/fragment_tex.glsl");
-            sr->_texture->bind();
-            sr->_shader->setUniform_i("u_Tex", sr->_texture->getSlot());
-            sr->_texture->unbind();
+            sr->p_texture = tex; 
+            sr->p_shader =std::shared_ptr<Shader>(Shader::BuildShader(Helpers::shader_location("/vertex.glsl"),
+             Helpers::shader_location("/fragment_tex.glsl")));
+            sr->p_texture->bind();
+            sr->p_shader->setUniform_i("u_Tex", sr->p_texture->getSlot());
+            sr->p_texture->unbind();
         }           
 
         return sr;
     }
 
-    void StaticRenderable::Render() const{
-        _shader->bind();
-        _vArray->bind();
-        if(_texture)_texture->bind();
-        GLCHECK(glDrawElements(GL_TRIANGLES, _iBuff->getCount(), GL_UNSIGNED_INT, 0));
-        if(_texture)_texture->unbind();
-        _vArray->unbind();
-        _shader->unbind();
+    void StaticRenderable::UpdateAndRender(){
+        p_shader->bind();
+        updateModelMatrix();
+        p_glBuffer->bind();
+        if(p_texture)p_texture->bind();
+        GLCHECK(glDrawElements(GL_TRIANGLES, p_glBuffer->getCount(), GL_UNSIGNED_INT, 0));
+        if(p_texture)p_texture->unbind();
+        p_glBuffer->unbind();
+        p_shader->unbind();
     }
 
+    void StaticRenderable::updateModelMatrix(){
+        auto model = glm::mat4(1.0f);
+        model = glm::translate(model, _pos);
+        model = glm::rotate(model, _rot.x, glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, _rot.y, glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, _rot.z, glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, _scale);
+        setMatrix4f("model", model);
+    }
 } // namespace Rendering

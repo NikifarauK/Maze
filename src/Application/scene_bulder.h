@@ -15,7 +15,9 @@ namespace Application
         void StartCreation();
         void SetWindow(Window*);
         void SetCamera(Rendering::Camera3d*);
-        void AddStaticRenderable(const Shapes::RendShape&,std::shared_ptr<Rendering::Texture> tex=nullptr);
+        void AddStaticRenderable(const Shapes::RendShape&,
+                glm::vec3 scale, glm::vec3 pos, 
+                glm::vec3 rot, std::shared_ptr<Rendering::Texture> tex=nullptr);
         SceneManager* Build();
         virtual SceneManager* Create(Window*);
     protected:

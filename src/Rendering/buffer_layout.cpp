@@ -35,8 +35,9 @@ namespace Rendering
     template <>
     void BufferLayout::Push<Shapes::Vertex>(uint32_t count)
     {
-        ASSERT(sizeof(Shapes::Vertex) == 5 * sizeof(float));
-        Push<float>(3); // xyz to Layout[0]
-        Push<float>(2); // text coords to Layout[1]
+        ASSERT(sizeof(Shapes::Vertex) == 8 * sizeof(float));
+        Push<float>(3); // xyz to         Layout[0]
+        Push<float>(3); // normal xyz to  Layout[1]
+        Push<float>(2); // text coords to Layout[2]
     }
 } // namespace Rendering

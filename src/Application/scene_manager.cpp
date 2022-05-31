@@ -81,20 +81,29 @@ namespace Application
 
     void SceneManager::UpdateAndRender(float elapsed_time){
         static float green = 0.0f;
+        static std::vector<float> modifiers =
+          [&](){static std::vector<float> x; auto size = _scene.size();float m = 13.f; 
+                    while(size--)x.emplace_back(m -= 1.f); return x;}();
+        static float rotation = 0.0f;
+        static float m = 0.35f;
         mouseHandler();
         keyHandler(elapsed_time);
         auto m4View = _p_camera->GetViewMatrix();
         auto m4Persp = _p_camera->GetPerspectiveMatrix(_p_window->getAspRatio());
-        glClearColor(0.2f, 0.67f, 0.8f, 1.0f);
+        glClearColor(0.1f, 0.23f, 0.45f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        float circle = glm::pi<float>() * 2;
+        int i = 0;
         for (auto obj : _scene){
             obj->setMatrix4f("projection", m4Persp);
             obj->setMatrix4f("trans", m4View);
-            obj->setMatrix4f("model", glm::mat4(1.0f));
             obj->setFloat("green", green);
-            obj->Render();
+            obj->addToRot(glm::vec3(0, rotation * modifiers[i++], 0));
+            obj->UpdateAndRender();
         }
-        green +=  green < 1.0f ? 0.5f * elapsed_time : -1.0f;
+        rotation += rotation < circle ? 0.0003f * elapsed_time : -rotation;
+        m = green <= 1.0f && green >= 0.0f ? m : (m * -1);
+        green +=  m * elapsed_time;
         std::stringstream title;
         auto dir = _p_camera->getDirection();
         title << std::fixed << std::setprecision(3)
