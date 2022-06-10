@@ -1,5 +1,6 @@
 #gitignore
 .vscode/
+.vs/
 [Bb]uild/
 [bB]in/
 *.o

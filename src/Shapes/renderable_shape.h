@@ -15,7 +15,7 @@ namespace Shapes
         inline virtual const void *getVertData() const { return _vertices.data(); }
 
         inline virtual uint32_t getIndicesCount() const { return static_cast<uint32_t>(_indices.size()); }
-        inline virtual uint32_t getIndicesSize() const { return static_cast<uint32_t>( _indices.size() * sizeof(uint)); }
+        inline virtual uint32_t getIndicesSize() const { return static_cast<uint32_t>( _indices.size() * sizeof(uint32_t)); }
         inline virtual const uint32_t* getIndicesData() const { return _indices.data(); }
         
         inline const std::string& getName() const { return _name; };
