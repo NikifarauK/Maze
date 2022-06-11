@@ -4,7 +4,7 @@
 std::string Helpers::parent_path()
 {
 #ifdef WINDOWS
-	return "\\..";
+	return "..";
 #else
 	auto t = std::filesystem::canonical("/proc/self/exe");
 	return t.parent_path().string();

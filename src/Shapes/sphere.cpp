@@ -9,7 +9,7 @@ namespace Shapes
         std::stringstream ss;
         ss << "sphere" << sectors << "x" << stacks;
         _name = ss.str();
-        float radius = 1.0f;
+        float radius = 0.5f;
         sectors = sectors > 3 ? sectors : 3;
         stacks = stacks > 2 ? stacks : 2;
         _vertices.emplace_back(0.0f, radius, 0.0f,0.0f, radius, 0.0f, 0.5f, 0);
@@ -30,7 +30,7 @@ namespace Shapes
                 auto m4_hor_rot = glm::rotate(glm::mat4(1.0f), h_angle, glm::vec3(0.0f, 1.0f, 0.0f));
                 auto v4 = m4_hor_rot * ver;
                 glm::vec3 res = glm::vec3(v4.x, v4.y, v4.z);
-                _vertices.emplace_back(res, res, dtx*(lon-1), dty*lat);
+                _vertices.emplace_back(res, glm::normalize(res), dtx*(lon-1), dty*lat);
                 setIndices(_indices, stacks, lat, sectors, lon);
                 h_angle += dh_angle;
             }

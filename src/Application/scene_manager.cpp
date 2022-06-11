@@ -94,14 +94,16 @@ namespace Application
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         float circle = glm::pi<float>() * 2;
         int i = 0;
+        glm::vec3 ligth_dir = glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f));
         for (auto obj : _scene){
             obj->setMatrix4f("projection", m4Persp);
             obj->setMatrix4f("trans", m4View);
             obj->setFloat("green", green);
+            obj->setVector3f("ligth_direction", ligth_dir);
             obj->addToRot(glm::vec3(0, rotation * modifiers[i++], 0));
             obj->UpdateAndRender();
         }
-        rotation += rotation < circle ? 0.0003f * elapsed_time : -rotation;
+        // rotation += rotation < circle ? 0.00003f * elapsed_time : -circle;
         m = green <= 1.0f && green >= 0.0f ? m : (m * -1);
         green +=  m * elapsed_time;
         std::stringstream title;
