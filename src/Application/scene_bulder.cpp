@@ -46,10 +46,10 @@ namespace Application
 
         AddStaticRenderable(Shapes::Sphere(64, 32), glm::vec3(2.2f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.1f, 0.4f), sun_tex);
         AddStaticRenderable(Shapes::Sphere(54, 24), glm::vec3(0.5f), glm::vec3(2.5f, 0.0f, 0.0f), glm::vec3(1.0f, 3.1f, 0.4f), earth_tex);
-        AddStaticRenderable(Shapes::Sphere(10, 10), glm::vec3(1.1f), glm::vec3(4.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.1f, -.4f), grass_tex);
+        AddStaticRenderable(Shapes::Sphere(4, 55), glm::vec3(1.1f), glm::vec3(4.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.1f, -.4f), grass_tex);
         AddStaticRenderable(Shapes::Cube(),         glm::vec3(1.0f), glm::vec3(5.0f, 0.0f, 3.0f), glm::vec3(1.0f, 5.1f, 5.4f), earth_tex);
         AddStaticRenderable(Shapes::Cube(),         glm::vec3(1.0f), glm::vec3(4.0f, 3.0f, -.5f), glm::vec3(1.0f, 0.1f, 0.4f));
-        AddStaticRenderable(Shapes::Sphere(16, 16), glm::vec3(1.2f), glm::vec3(6.0f, 0.0f, 5.0f), glm::vec3(1.0f, 6.1f, 2.4f));
+        AddStaticRenderable(Shapes::Sphere(46, 46), glm::vec3(1.2f), glm::vec3(6.0f, 0.0f, 5.0f), glm::vec3(1.0f, 6.1f, 2.4f));
         AddStaticRenderable(Shapes::Cube(),         glm::vec3(1.0f), glm::vec3(7.0f, 5.0f, 1.0f), glm::vec3(1.0f, 3.1f, 2.4f), grass_tex);
         AddStaticRenderable(Shapes::Cube(),         glm::vec3(1.0f), glm::vec3(3.0f, 0.0f,11.0f), glm::vec3(1.0f, 2.1f, 6.2f), box_tex);
         AddStaticRenderable(Shapes::Cube(),         glm::vec3(3.0f), glm::vec3(6.0f, 2.0f,10.0f), glm::vec3(1.0f, 0.1f, 2.4f), box_tex);

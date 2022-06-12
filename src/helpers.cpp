@@ -13,7 +13,7 @@ std::string Helpers::parent_path()
 
 std::string Helpers::shader_location(const std::string& file_name) {
 #ifdef WINDOWS
-	auto str = std::string("..\\res\\shaders\\") + &(file_name.data()[1]);
+	auto str = std::string("..\\..\\res\\shaders\\") + &(file_name.data()[1]);
 	return str;
 #else
 	std::string path = parent_path() + "/../res/shaders" + file_name;
@@ -26,7 +26,7 @@ std::string Helpers::shader_location(const std::string& file_name) {
 
 std::string Helpers::image_location(const std::string& file_name) {
 #ifdef WINDOWS
-	auto str = std::string("..\\res\\img\\") + &(file_name.data()[1]);
+	auto str = std::string("..\\..\\res\\img\\") + &(file_name.data()[1]);
 	return str;
 #else
 	std::string path = parent_path() + "/../res/img" + file_name;

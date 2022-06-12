@@ -54,6 +54,10 @@ namespace Rendering
         glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
+    void Shader::setUniform_m3f(const std::string& name, glm::mat3 value){
+        glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+    }
+
     void Shader::setUniform_v3f(const std::string& name, glm::vec3 value){
         glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
     }
@@ -61,6 +65,7 @@ namespace Rendering
     void Shader::setUniform_f(const std::string& name, float value){
         glUniform1f(getUniformLocation(name), value);
     }
+
 
     void Shader::setUniform_i(const std::string& name, int32_t value){
         glUniform1i(getUniformLocation(name), value);

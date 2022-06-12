@@ -45,12 +45,26 @@ namespace Rendering
     }
 
     void StaticRenderable::updateModelMatrix(){
-        auto model = glm::mat4(1.0f);
+        auto model = getModelMatrix();
+        setMatrix4f("model", model);
+        setMatrix3f("norm_matrix", getNormalMatrix(model));
+    }
+    glm::mat3 StaticRenderable::getNormalMatrix(const glm::mat4& model) const
+    {
+        auto normal = glm::mat3();
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                normal[j][i] = model[i][j];
+        return glm::inverse(normal);
+    }
+    glm::mat4 StaticRenderable::getModelMatrix() const
+    {
+        auto model =glm::mat4(1.0f);
         model = glm::translate(model, _pos);
         model = glm::rotate(model, _rot.x, glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::rotate(model, _rot.y, glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::rotate(model, _rot.z, glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, _scale);
-        setMatrix4f("model", model);
+        return model;
     }
 } // namespace Rendering

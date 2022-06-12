@@ -15,9 +15,10 @@ namespace Rendering
         void unbind() const;
 
         void setUniform_m4f(const std::string&, glm::mat4);
+        void setUniform_m3f(const std::string&, glm::mat3);
         void setUniform_v3f(const std::string&, glm::vec3);
         void setUniform_f(const std::string&, float);
-        void setUniform_i(const std::string&, int);
+        void setUniform_i(const std::string&, int32_t);
 
     protected:
         std::string getShaderSource(const std::string& path) const;

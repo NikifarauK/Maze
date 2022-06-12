@@ -28,6 +28,7 @@ namespace Rendering
         inline void addToRot(glm::vec3 r){ _rot += r; };
         
         inline void setMatrix4f(const std::string& name, glm::mat4 val){ p_shader->setUniform_m4f(name, val); };
+        inline void setMatrix3f(const std::string& name, glm::mat3 val){ p_shader->setUniform_m3f(name, val); };
         inline void setVector3f(const std::string& name, glm::vec3 val){ p_shader->setUniform_v3f(name, val); };
         inline void setFloat   (const std::string& name, float val)    { p_shader->setUniform_f  (name, val); };
         inline void setInt     (const std::string& name, int val)      { p_shader->setUniform_i  (name, val); };
@@ -43,6 +44,8 @@ namespace Rendering
 
         StaticRenderable();
         void updateModelMatrix();
+        glm::mat3 getNormalMatrix(const glm::mat4&) const;
+        glm::mat4 StaticRenderable::getModelMatrix() const;
     };
 
 } // namespace Rendering
